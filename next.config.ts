@@ -1,12 +1,12 @@
 import type { NextConfig } from "next";
 
-const nextConfig:NextConfig = {
-  output: 'export',               // Required for GitHub Pages
+const nextConfig: NextConfig = {
+  output: "export",
   images: {
-    unoptimized: true,            // Required for GH Pages
+    unoptimized: true,
   },
-  basePath: '/portfolio-V1',      // <-- replace this with your repo name
-  assetPrefix: "/portfolio-V1/",   // <-- replace this with your repo name
+  basePath: "/portfolio-v1",       // FIXED (correct repo name)
+  assetPrefix: "/portfolio-v1/",   // FIXED (correct repo name)
 };
 
 export default nextConfig;
