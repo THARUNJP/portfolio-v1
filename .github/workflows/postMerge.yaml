@@ -43,10 +43,19 @@ jobs:
   deploy:
     needs: post-merge
     runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     permissions:
       pages: write
       id-token: write
 
     steps:
+      # ADD THIS 
+      - name: Download artifact
+        uses: actions/download-pages-artifact@v3
+
+      # DEPLOY
       - name: Deploy to GitHub Pages
+        id: deployment
         uses: actions/deploy-pages@v4
