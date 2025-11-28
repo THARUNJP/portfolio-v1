@@ -7,7 +7,6 @@ on:
 jobs:
   post-merge:
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
         node-version: [20]
@@ -17,8 +16,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # --- 2) Setup Node (NO CACHE) ---
-      - name: Setup Node.js ${{ matrix.node-version }}
+      # --- 2) Setup Node ---
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
@@ -35,14 +34,14 @@ jobs:
       - name: Security Audit
         run: npm audit --production --audit-level=high || true
 
-          # --- 5) Upload static site artifact (out directory) ---
+      # --- 6) Upload static site artifact ---
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./out
 
   deploy:
-    needs: build
+    needs: post-merge
     runs-on: ubuntu-latest
     permissions:
       pages: write
