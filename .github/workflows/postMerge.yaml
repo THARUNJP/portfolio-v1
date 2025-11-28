@@ -1,0 +1,41 @@
+name: Post-Merge Pipeline
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  post-merge:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [20]
+
+    steps:
+      # --- 1) Checkout ---
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # --- 2) Setup Node (NO CACHE) ---
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      # --- 3) Install Dependencies ---
+      - name: Install Dependencies
+        run: npm ci
+
+      # --- 4) Build ---
+      - name: Build
+        run: npm run build
+
+      # --- 5) Security Audit ---
+      - name: Security Audit
+        run: npm audit --production --audit-level=high || true
+
+      # --- 6) Deploy ---
+      - name: Deploy
+        run: |
+          echo "Deploying to production..."

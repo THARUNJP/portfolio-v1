@@ -1,9 +1,7 @@
-name: CI Pipeline
+name: PR CI
 
 on:
   pull_request:
-    branches: [master]
-  push:
     branches: [master]
 
 jobs:
@@ -15,7 +13,7 @@ jobs:
         node-version: [20]
 
     steps:
-      # --- 1) Checkout Repository ---
+      # --- 1) Checkout code ---
       - name: Checkout repository
         uses: actions/checkout@v4
 
@@ -31,22 +29,17 @@ jobs:
         run: npm ci
 
       # --- 4) Lint ---
-      - name: Lint (ESLint)
+      - name: Lint
         run: npm run lint --if-present
 
       # --- 5) Typecheck ---
-      - name: Typecheck (TS)
+      - name: Typecheck
         run: npm run typecheck --if-present
 
       # --- 6) Unit Tests ---
-      - name: Run Unit Tests
+      - name: Run Tests
         run: npm run test --if-present
 
-      # --- 7) Build (Next.js) ---
-      - name: Build (next build)
+      # --- 7) Build ---
+      - name: Build
         run: npm run build
-
-      # --- 8) Security Audit (ONLY on master) ---
-      - name: Security Audit
-        if: github.ref == 'refs/heads/master'
-        run: npm audit --production --audit-level=high || true
